@@ -1,0 +1,116 @@
+---
+title: "Iara Andrade's CV"
+author: Iara Andrade
+date: "`r Sys.Date()`"
+params:
+  pdf_mode:
+    value: true
+output:
+  pagedown::html_resume:
+    css: ['dd_cv.css', 'resume']
+    self_contained: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  results='asis', 
+  echo = FALSE
+)
+
+library(magrittr) # For the pipe
+source("cv_printing_functions.r")
+
+# Read in all data and initialize a CV printer object
+CV <- create_CV_object(
+  data_location = "https://docs.google.com/spreadsheets/d/10o8tl84ASEpmkghclvdywXyjAXjHqbbQbKh4DC5gj3w",  
+  pdf_mode = params$pdf_mode
+)
+
+```
+
+
+```{r}
+# When in pdf export mode the little dots are unaligned, so fix that with some conditional CSS.
+if(params$pdf_mode) {
+    cat("
+<style>
+:root{
+  --decorator-outer-offset-left: -6.5px;
+}
+</style>")
+}
+```
+
+
+Aside
+================================================================================
+
+```{r eval=FALSE, include=FALSE}
+# Build interactive network of positions colored by section
+# and connected if they occurred in the same year
+datadrivencv::build_network_logo(CV$entries_data)
+```
+<i class='fas fa-download'></i> [Download as PDF](https://github.com/iaragi/CV/raw/master/iara_cv.pdf)
+
+
+Contact {#contact}
+--------------------------------------------------------------------------------
+
+<i class="fa fa-github"></i> [github.com/iaragi](https://github.com/iaragi) \
+
+Programming SKills {#skills}
+--------------------------------------------------------------------------------
+<i class="fab fa-r-project"></i> R \
+<i class="fas fa-database"></i> SQL \
+<i class="fab fa-python"></i> Python \
+
+Languages {#languages}
+--------------------------------------------------------------------------------
+Portuguese: Native \
+English: Proeficient
+
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+
+The source code is available on [GitHub](https://github.com/iaragi/CV).
+
+Last updated on `r Sys.Date()`.
+
+Main
+================================================================================
+
+Iara Andrade {#title}
+--------------------------------------------------------------------------------
+
+```{r eval=FALSE, include=FALSE}
+# Note the special double pipe so we modify the CV object in place
+CV %<>% print_text_block("intro") 
+```
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+CV %<>% print_section('education')
+```
+
+Industry Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+```{r}
+CV %<>% print_section('industry_positions')
+```
+
+<!-- These breaks just force a new page so section doesnt get cut off -->
+<br>
+<br>
+<br>
+
+Courses {data-icon=book-open}
+--------------------------------------------------------------------------------
+```{r}
+CV %<>% print_section('courses')
+```
